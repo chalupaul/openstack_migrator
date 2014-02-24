@@ -1,19 +1,22 @@
 #!/bin/bash
-if [ $b == '-h' -o $b == '--help' -o $# -ne 2 ]; then
+helparg=${1:-h}
+if [ $helparg == '-h' -o $helparg == '--help' -o $# -ne 2 ]; then
     echo "Usage: $0 <instance uuid> <new host name>"
     exit 0
 fi
 instance_uuid=$1
 target_host=$2
 
+# for the osx
+export CLICOLOR=1
 function einfo {
-    green='\e[032m'
-    nocolor='\e[0m'
+    green='\033[0;32m'
+    nocolor='\033[0m'
     echo -e "${green}$1${nocolor}"
 }
 function ewarn {
-    red='\e[0;31m'
-    nocolor='\e[0m'
+    red='\033[0;31m'
+    nocolor='\033[0m'
     echo -e "${red}$1${nocolor}"
 }
 
