@@ -1,5 +1,8 @@
 #!/bin/bash
-
+if [ $b == '-h' -o $b == '--help' -o $# -ne 2 ]; then
+    echo "Usage: $0 <instance uuid> <new host name>"
+    exit 0
+fi
 instance_uuid=$1
 target_host=$2
 
