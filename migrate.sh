@@ -107,6 +107,12 @@ else
     done
 fi
 
+image_id=`nova show $instance_uuid | sed 's/|//g' | awk '($1 ~ /image/) {print $NF}' | sed 's/[\(|\)]//g'`
+if [ `nova image-list | grep $image_id | wc -l` -eq 0 ]; then
+    einfo "Image not found in Glance repo. Copying over cache'd copy..."
+    cache_image_id=`echo -n $image_id | openssl dgst -sha1 | awk '{print $NF}'`
+    ssh $source_host "rsync -apP /var/lib/nova/instances/_base/$cache_image_id $target_host:/var/lib/nova/instances/_base"
+fi
 
 einfo "Stopping monit and nova-compute services on $source_host..."
 service_name=`ssh -q $source_host "ls /etc/init.d/*nova-compute" | sed 's/\// /g' | awk '{print $NF}'`
